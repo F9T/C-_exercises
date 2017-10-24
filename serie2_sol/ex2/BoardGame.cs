@@ -12,7 +12,7 @@ namespace ex2
 
         public BoardGame()
         {
-            this.slotNumber = 26;
+            this.slotNumber = alphabet.Length;
             this.board = new int[slotNumber];
             this.pawnNumber = 6;
             this.Initialize();
@@ -20,10 +20,7 @@ namespace ex2
 
         private void Initialize()
         {
-            for (int i = 0; i < board.Length; i++)
-            {
-                board[i] = 0;
-            }
+            board.Initialize();
             for (int i = 1; i <= pawnNumber;)
             {
                 int random = new Random().Next(0, board.Length);
@@ -55,15 +52,9 @@ namespace ex2
             }
         }
 
-        public int SlotNumber
-        {
-            get { return slotNumber; }
-        }
+        public int SlotNumber => slotNumber;
 
-        public int PawnNumber
-        {
-            get { return pawnNumber; }
-        }
+        public int PawnNumber => pawnNumber;
 
         public IEnumerator<string> GetEnumerator()
         {

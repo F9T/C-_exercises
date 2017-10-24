@@ -25,7 +25,8 @@ namespace ex2
             foreach (string str in boardGame)
             {
                 Console.Write($"{str}, ");
-            }/*
+            }
+            /* Version sans enumeration
             for (int i = 1; i <= boardGame.PawnNumber; i++)
             {
                 Console.Write($"{i} : {boardGame[i]}");

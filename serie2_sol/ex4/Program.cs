@@ -5,7 +5,6 @@ namespace ex4
 {
     public class Program
     {
-        public static void publicationDesdonnees() { Console.ReadKey(); }
 
         public static void Main(string[] args)
         {
@@ -14,7 +13,6 @@ namespace ex4
             try
             {
                 path = Console.ReadLine();
-                path = @"..\..\..\data4.txt";
                 lines = File.ReadAllLines(path);
             }
             catch (FileNotFoundException e)
@@ -35,8 +33,7 @@ namespace ex4
             {
                 try
                 {
-                    datas[index] = Convert.ToInt32(line);
-                    index++;
+                    datas[index++] = Convert.ToInt32(line);
                     Console.Write($"{line} ");
                 }
                 catch (OverflowException e) { Console.WriteLine($"line {index}: {e.Message}"); }
