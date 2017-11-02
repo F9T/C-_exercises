@@ -20,7 +20,6 @@ namespace ex2
 
         private void Initialize()
         {
-            board.Initialize();
             for (int i = 1; i <= pawnNumber;)
             {
                 int random = new Random().Next(0, board.Length);

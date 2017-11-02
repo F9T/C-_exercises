@@ -10,7 +10,7 @@ namespace ex2
 
             Console.WriteLine("THE BOARD");
             Console.WriteLine("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-            for (char c = 'A'; c < 'Z'; c++)
+            for (char c = 'A'; c <= 'Z'; c++)
             {
                 if (boardGame[c])
                 {
