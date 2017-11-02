@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B3603B2F-DAB5-4F75-9CB0-9B0F6A7BF9B8}</ProjectGuid>
+    <ProjectGuid>{2BEFB1C2-B27A-4FA0-85E3-FFD19A5FD0AD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>serie3_sol</RootNamespace>
-    <AssemblyName>serie3_sol</AssemblyName>
+    <RootNamespace>word_generator</RootNamespace>
+    <AssemblyName>word_generator</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
