@@ -28,12 +28,12 @@ namespace ex_hangman
             
         }
 
-        public void Deserialize(string _path)
+        public int Deserialize(string _path)
         {
-            hangmanModel.Deserialize();
+            return hangmanModel.Deserialize(string _path);
         }
 
-        public void Serialize()
+        public void Serialize(string _path)
         {
             
         }

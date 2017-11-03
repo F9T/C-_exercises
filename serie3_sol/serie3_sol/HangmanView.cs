@@ -12,5 +12,10 @@ namespace ex_hangman
         {
             
         }
+
+        public void PrintHangman()
+        {
+            
+        }
     }
 }
