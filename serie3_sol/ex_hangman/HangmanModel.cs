@@ -9,7 +9,6 @@ namespace ex_hangman
     public class HangmanModel
     {
         private Hangman hangman;
-        private bool isSaved;
 
         public string PathFile { get; set; }
         
@@ -20,14 +19,14 @@ namespace ex_hangman
 
         public HangmanModel()
         {
-            this.CurrentCount = 0;
-            this.isSaved = true;
+            CurrentCount = 0;
+            PathFile = "";
         }
 
         public void GetRandomWord()
         {
             CurrentPlayWord = hangman.ChoiceRandomWord();
-            this.CurrentCount = 0;
+            CurrentCount = 0;
         }
 
         public bool IsNewRecord()
@@ -38,7 +37,6 @@ namespace ex_hangman
         public void UpdateHangmanScore()
         {
             hangman.UpdateWordScore(CurrentPlayWord.Item1, CurrentCount);
-            isSaved = false;
         }
 
         public List<Tuple<StringBuilder, StringBuilder, int>> GetWordScore()
@@ -77,47 +75,43 @@ namespace ex_hangman
 
         public void AddNewWord(string _word)
         {
-            if (!FileCreate())
+            if (!IsFileCreate())
             {
                 hangman = new Hangman();
             }
             hangman.AddNewWord(_word);
-            isSaved = false;
         }
 
-        public bool FileCreate()
+        public bool IsFileCreate()
         {
-            return hangman != null;
+            return hangman != null && PathFile.Length > 3;
         }
 
         public bool ContainsWords()
         {
-            return FileCreate() && hangman.CountWords() > 0;
-        }
-
-        public bool IsSaved()
-        {
-            return isSaved && PathFile != null;
+            return IsFileCreate() && hangman.CountWords() > 0;
         }
 
         public int Deserialize(string _path)
         {
             hangman = HangmanSerializer.Deserialize(_path);
-            if (FileCreate())
+            if (hangman != null)
             {
                 PathFile = _path;
-                isSaved = true;
                 return hangman.CountWords();
             }
-            return 0;
+            return -1;
         }
 
         public bool Serialize(string _path)
         {
+            if (hangman == null)
+            {
+                hangman = new Hangman();
+            }
             if (HangmanSerializer.Serialize(_path, hangman))
             {
                 PathFile = _path;
-                isSaved = true;
                 return true;
             }
             return false;

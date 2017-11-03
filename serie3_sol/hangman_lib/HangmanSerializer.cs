@@ -17,13 +17,13 @@ namespace hangman_lib
                 {
                     hangman = (Hangman) formatter.Deserialize(stream);
                 }
-                catch (ArgumentNullException _e)
+                catch (ArgumentNullException e)
                 {
-                    Console.WriteLine(_e.Message);
+                    Console.WriteLine(e.Message);
                 }
-                catch (SerializationException _e)
+                catch (SerializationException e)
                 {
-                    Console.WriteLine(_e.Message);
+                    Console.WriteLine(e.Message);
                 }
             }
             return hangman;
@@ -40,15 +40,15 @@ namespace hangman_lib
                     formatter.Serialize(stream, _hangman);
                     stream.Flush();
                 }
-                catch (ArgumentNullException _e)
+                catch (ArgumentNullException e)
                 {
                     success = false;
-                    Console.WriteLine(_e.Message);
+                    Console.WriteLine(e.Message);
                 }
-                catch (SerializationException _e)
+                catch (SerializationException e)
                 {
                     success = false;
-                    Console.WriteLine(_e.Message);
+                    Console.WriteLine(e.Message);
                 }
             }
             return success;

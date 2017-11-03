@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ex_hangman
 {
@@ -10,29 +7,47 @@ namespace ex_hangman
     {
         public void PrintHangman(string _currentFindWord)
         {
-            PrintWord(_currentFindWord);
-            Console.Write("Proposer une lettre : ");
-        }
-
-        public void PrintWord(string _currentFindWord)
-        {
-            Console.WriteLine($"Mot : {_currentFindWord}");
+            PrintMessage($"Mot : {_currentFindWord}");
+            PrintMessage("Proposer une lettre : ", false);
         }
 
         public void PrintEnd(string _wordFind, int _numberInput, bool _isNewRecord)
         {
-            Console.Write($"Bravo, vous avez trouvé le mot {_wordFind} en {_numberInput} essais");
+            PrintMessage($"Bravo, vous avez trouvé le mot {_wordFind} en {_numberInput} essais", false);
             if (_isNewRecord)
             {
-                Console.Write(" (nouveau record)");
+                PrintMessage(" (nouveau record)", false);
             }
-            Console.WriteLine();
+            PrintMessage("");
         }
 
         public void PrintScore(Tuple<StringBuilder, StringBuilder, int> _wordScores)
         {
-            Console.Write($"{_wordScores.Item1.GetHashCode()} : {_wordScores.Item2}  ");
-            Console.WriteLine(_wordScores.Item3 > -1 ? $"{_wordScores.Item3} essais" : "pas trouvé");
+            PrintMessage($"{_wordScores.Item1.GetHashCode()} : {_wordScores.Item2}  ", false);
+            PrintMessage(_wordScores.Item3 > -1 ? $"{_wordScores.Item3} essais" : "pas trouvé");
+        }
+        public void PrintOptions()
+        {
+            PrintMessage("Vos options sont :");
+            PrintMessage("1) Choisir un fichier de mots");
+            PrintMessage("2) Jouer (trouver un mot)");
+            PrintMessage("3) Afficher les scores");
+            PrintMessage("4) Ajouter un nouveau mot");
+            PrintMessage("5) Sauvegarder le fichier de mots");
+            PrintMessage("6) Terminer");
+            PrintMessage("Choix : ", false);
+        }
+
+        public void PrintMessage(string _message, bool _newLine = true)
+        {
+            if (_newLine)
+            {
+                Console.WriteLine($"{_message}");
+            }
+            else
+            {
+                Console.Write($"{_message}");
+            }
         }
     }
 }

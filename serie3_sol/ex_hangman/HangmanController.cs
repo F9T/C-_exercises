@@ -1,47 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ex_hangman
 {
     public class HangmanController
     {
+        //view and model instances never change (readonly)
         private readonly HangmanModel hangmanModel;
+
         private readonly HangmanView hangmanView;
 
         public HangmanController()
         {
-            this.hangmanModel = new HangmanModel();
-            this.hangmanView = new HangmanView();
+            hangmanModel = new HangmanModel();
+            hangmanView = new HangmanView();
         }
 
-        public bool AddNewWord(string _word)
+        public bool AddNewWord()
         {
-            if (IsAWord(_word))
+            hangmanView.PrintMessage("Entrer votre nouveau mot (ne pas mettre d'accent) : ", false);
+            string newWord = Console.ReadLine();
+            bool success = IsAWord(newWord);
+            hangmanView.PrintMessage(success
+                ? $"Le mot {newWord} a été ajouté."
+                : $"Le mot {newWord} contient une erreur!");
+            if (success)
             {
-                hangmanModel.AddNewWord(_word);
+                hangmanModel.AddNewWord(newWord);
                 return true;
             }
             return false;
         }
 
-        private bool IsAWord(string _word)
+        private static bool IsAWord(string _word)
         {
             return Regex.IsMatch(_word, @"^[A-Za-z]+$");
         }
 
         public bool IsFileOpen()
         {
-            return hangmanModel.ContainsWords();
+            return hangmanModel.IsFileCreate();
         }
 
-        public void RandomWord()
+        public bool RandomWord()
         {
-            hangmanModel.GetRandomWord();
+            if (hangmanModel.ContainsWords())
+            {
+                hangmanModel.GetRandomWord();
+                return true;
+            }
+            return false;
+        }
+
+        public void DisplayOptions()
+        {
+            hangmanView.PrintOptions();
         }
 
         public bool Play()
@@ -57,27 +71,66 @@ namespace ex_hangman
 
         public void End()
         {
-            hangmanView.PrintWord(hangmanModel.CurrentPlayWord.Item2.ToString());
-            hangmanView.PrintEnd(hangmanModel.CurrentPlayWord.Item1.ToString(), hangmanModel.CurrentCount, hangmanModel.IsNewRecord());
+            hangmanView.PrintMessage($"Mot : {hangmanModel.CurrentPlayWord.Item2}");
+            hangmanView.PrintEnd(hangmanModel.CurrentPlayWord.Item1.ToString(), hangmanModel.CurrentCount,
+                hangmanModel.IsNewRecord());
             hangmanModel.UpdateHangmanScore();
         }
 
         public void DisplayScores()
         {
-            foreach (var wordScore in hangmanModel.GetWordScore())
+            int size = hangmanModel.GetWordScore().Count;
+            if (size > 0)
             {
-                hangmanView.PrintScore(wordScore);
+                foreach (var wordScore in hangmanModel.GetWordScore())
+                {
+                    hangmanView.PrintScore(wordScore);
+                }
+            }
+            else
+            {
+                hangmanView.PrintMessage("Aucun mot dans la base de données.");
             }
         }
 
-        public int Deserialize(string _path)
+        public string ChoosePathFile(bool _load = true)
         {
-            return hangmanModel.Deserialize(_path);
+            string path;
+            if (_load)
+            {
+                hangmanView.PrintMessage("Donner le chemin du fichier (.ser) : ", false);
+                path = Console.ReadLine();
+            }
+            else
+            {
+                hangmanView.PrintMessage($"Donner le chemin du fichier (.ser) [{hangmanModel.PathFile}] : ", false);
+                path = hangmanModel.PathFile + Console.ReadLine();
+            }
+            return CheckFile(path) ? path : null;
         }
 
-        public bool Serialize(string _path)
+        private static bool CheckFile(string _path)
         {
-            return hangmanModel.Serialize(_path);
+            if (!string.IsNullOrEmpty(_path))
+            {
+                FileInfo file = new FileInfo(_path);
+                return file.Exists && file.Extension.ToLower() == ".ser";
+            }
+            return false;
+        }
+
+        public void Deserialize(string _path)
+        {
+            int numberWords = hangmanModel.Deserialize(_path);
+            hangmanView.PrintMessage($"{numberWords} mots chargés avec succès.");
+        }
+
+        public void Serialize(string _path)
+        {
+            if (hangmanModel.Serialize(_path))
+            {
+                hangmanView.PrintMessage("Sauvegarde réussie.");
+            }
         }
     }
 }

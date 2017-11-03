@@ -10,15 +10,20 @@ namespace hangman_lib
     {
         private Dictionary<StringBuilder, int> dictWordScore;
 
+        public Hangman()
+        {
+            dictWordScore = new Dictionary<StringBuilder, int>();
+        }
+
         public int CountWords()
         {
-            //null-coalescing epxression with ?
+            //null-coalescing epxression with obj?.
             return dictWordScore?.Count ?? 0;
         }
 
         public void AddNewWord(string _word)
         {
-            this.AddNewWord(new StringBuilder(_word.ToLower()));
+            AddNewWord(new StringBuilder(_word.ToLower()));
         }
 
         private void AddNewWord(StringBuilder _word)
@@ -32,7 +37,7 @@ namespace hangman_lib
 
         public void UpdateWordScore(StringBuilder _word, int _score)
         {
-            dictWordScore.TryGetValue(_word, out int score);
+            //Update only if it's a new record
             if (IsNewRecord(_word, _score))
             {
                 dictWordScore[_word] = _score;

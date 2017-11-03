@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Net.Mime;
 
 namespace ex_hangman
 {
@@ -17,11 +15,12 @@ namespace ex_hangman
             None
         }
 
-        private HangmanController hangmanController;
+        //controller instance never change (readonly)
+        private readonly HangmanController hangmanController;
 
         public Board()
         {
-            this.hangmanController = new HangmanController();
+            hangmanController = new HangmanController();
         }
 
         public void LoopGame()
@@ -30,7 +29,7 @@ namespace ex_hangman
             while (choice != EnumChoice.Exit)
             {
                 choice = EnumChoice.None;
-                PrintOptions();
+                hangmanController.DisplayOptions();
                 if (int.TryParse(Console.ReadLine(), out int number))
                 {
                     Console.Clear();
@@ -40,56 +39,19 @@ namespace ex_hangman
                         switch (choice)
                         {
                             case EnumChoice.ChooseFile:
-                                string pathLoadFile = ChoosePathFile();
-                                if (pathLoadFile != null)
-                                {
-                                    int numberWords = hangmanController.Deserialize(pathLoadFile);
-                                    Console.WriteLine($"{numberWords} mots chargés avec succès.");
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Le chemin spécifié contient une erreur!");
-                                }
+                                ChooseFileOption();
                                 break;
                             case EnumChoice.Play:
-                                if (hangmanController.IsFileOpen())
-                                {
-                                    hangmanController.RandomWord();
-                                    while (!hangmanController.Play()) {}
-                                    hangmanController.End();
-                                }
-                                else
-                                {
-                                    Console.Write("Aucun fichier de mots n'est ouvert!");
-                                }
+                                PlayOption();
                                 break;
                             case EnumChoice.DisplayScores:
-                                if (hangmanController.IsFileOpen())
-                                {
-                                    hangmanController.DisplayScores();
-                                }
-                                else
-                                {
-                                    Console.Write("Aucun fichier de mots n'est ouvert!");
-                                }
+                                DisplayScoresOption();
                                 break;
                             case EnumChoice.AddNewWord:
-                                Console.Write("Entrer votre nouveau mot (ne pas mettre d'accent) : ");
-                                string newWord = Console.ReadLine();
-                                Console.WriteLine(hangmanController.AddNewWord(newWord)
-                                    ? $"Le mot {newWord} a été ajouté."
-                                    : $"Le mot {newWord} contient une erreur!");
+                                hangmanController.AddNewWord();
                                 break;
                             case EnumChoice.SaveFile:
-                                string pathSaveFile = ChoosePathFile();
-                                if (pathSaveFile != null)
-                                {
-                                    hangmanController.Serialize(pathSaveFile);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Le chemin spécifié contient une erreur!");
-                                }
+                                SaveFile();
                                 break;
                             case EnumChoice.Exit:
                                 Environment.Exit(0);
@@ -102,29 +64,65 @@ namespace ex_hangman
             Console.ReadLine();
         }
 
-        private void PrintOptions()
+        private void SaveFile()
         {
-            Console.WriteLine("Vos options sont :");
-            Console.WriteLine("1) Choisir un fichier de mots");
-            Console.WriteLine("2) Jouer (trouver un mot)");
-            Console.WriteLine("3) Afficher les scores");
-            Console.WriteLine("4) Ajouter un nouveau mot");
-            Console.WriteLine("5) Sauvegarder le fichier de mots");
-            Console.WriteLine("6) Terminer");
-            Console.Write("Choix : ");
+            string pathSaveFile = hangmanController.ChoosePathFile(false);
+            if (pathSaveFile != null)
+            {
+                hangmanController.Serialize(pathSaveFile);
+            }
+            else
+            {
+                Console.WriteLine("Le chemin spécifié contient une erreur!");
+            }
         }
 
-        private string ChoosePathFile(string _path="")
+        private void DisplayScoresOption()
         {
-            Console.Write($"Donner le chemin du fichier (.ser) : {_path}");
-            string path = Console.ReadLine();
-            return CheckFile(path) ? path : null;
+            if (hangmanController.IsFileOpen())
+            {
+                hangmanController.DisplayScores();
+            }
+            else
+            {
+                Console.Write("Aucun fichier de mots n'est ouvert!");
+            }
         }
 
-        private bool CheckFile(string _path)
+        private void ChooseFileOption()
         {
-            FileInfo file = new FileInfo(_path);
-            return file.Exists && file.Extension.ToLower() == ".ser";
+            string pathLoadFile = hangmanController.ChoosePathFile();
+            if (pathLoadFile != null)
+            {
+                hangmanController.Deserialize(pathLoadFile);
+            }
+            else
+            {
+                Console.WriteLine("Le chemin spécifié contient une erreur!");
+            }
+        }
+
+        private void PlayOption()
+        {
+            if (hangmanController.IsFileOpen())
+            {
+                bool findWord = hangmanController.RandomWord();
+                if (findWord)
+                {
+                    while (!hangmanController.Play())
+                    {
+                    }
+                    hangmanController.End();
+                }
+                else
+                {
+                    Console.WriteLine("Aucun mot n'est présent dans la base de données.");
+                }
+            }
+            else
+            {
+                Console.Write("Aucun fichier de mots n'est ouvert!");
+            }
         }
 
         public static void Main(string[] _args)
