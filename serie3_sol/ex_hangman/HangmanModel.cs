@@ -12,11 +12,14 @@ namespace ex_hangman
 
         public string PathFile { get; set; }
 
-        public bool ContainsWords { get; set; }
-
         public HangmanModel()
         {
             
+        }
+
+        public bool ContainsWords()
+        {
+            return hangman != null && hangman.CountWords() > 0;
         }
 
         public int Deserialize(string _path)
@@ -29,12 +32,9 @@ namespace ex_hangman
             return 0;
         }
 
-        public void Serialize(string _path)
+        public bool Serialize(string _path)
         {
-            if (hangman != null)
-            {
-                HangmanSerializer.Serialize(_path, hangman);
-            }
+            return HangmanSerializer.Serialize(_path, hangman);
         }
     }
 }

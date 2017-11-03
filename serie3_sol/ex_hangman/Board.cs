@@ -1,26 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ex_hangman
 {
-    public class Program
+    public class Board
     {
         private enum EnumChoice
         {
             ChooseFile = 1,
             Play = 2,
             DisplayScores = 3,
-            Exit = 4,
+            AddNewWord = 4,
+            SaveFile = 5,
+            Exit = 6,
             None
         }
 
         private HangmanController hangmanController;
 
-        public Program()
+        public Board()
         {
             this.hangmanController = new HangmanController();
         }
@@ -44,7 +42,8 @@ namespace ex_hangman
                                 string pathFile = ChoosePathFile();
                                 if (pathFile != null)
                                 {
-                                    hangmanController.Deserialize(pathFile);
+                                    int numberWords = hangmanController.Deserialize(pathFile);
+                                    Console.WriteLine($"{numberWords} chargés avec succès");
                                 }
                                 else
                                 {
@@ -62,6 +61,12 @@ namespace ex_hangman
                                 }
                                 break;
                             case EnumChoice.DisplayScores:
+
+                                break;
+                            case EnumChoice.AddNewWord:
+
+                                break;
+                            case EnumChoice.SaveFile:
 
                                 break;
                             case EnumChoice.Exit:
@@ -100,7 +105,7 @@ namespace ex_hangman
 
         public static void Main(string[] _args)
         {
-            var prog = new Program();
+            var prog = new Board();
             prog.LoopGame();
         }
     }

@@ -20,7 +20,7 @@ namespace ex_hangman
 
         public bool LetsPlay()
         {
-            return hangmanModel.ContainsWords;
+            return hangmanModel.ContainsWords();
         }
 
         public void Play()
@@ -30,12 +30,12 @@ namespace ex_hangman
 
         public int Deserialize(string _path)
         {
-            return hangmanModel.Deserialize(string _path);
+            return hangmanModel.Deserialize(_path);
         }
 
-        public void Serialize(string _path)
+        public bool Serialize(string _path)
         {
-            
+            return hangmanModel.Serialize(_path);
         }
     }
 }
