@@ -60,6 +60,11 @@ namespace ex_hangman
                         Console.WriteLine();
                     }
                 }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Choix incorrect!\n");
+                }
             }
             Console.ReadLine();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -23,7 +24,7 @@ namespace hangman_lib
 
         public void AddNewWord(string _word)
         {
-            AddNewWord(new StringBuilder(_word.ToLower()));
+            AddNewWord(new StringBuilder(RemoveDiacritics(_word.ToLower())));
         }
 
         private void AddNewWord(StringBuilder _word)
@@ -71,6 +72,17 @@ namespace hangman_lib
         public Dictionary<StringBuilder, int> GetWordScore()
         {
             return dictWordScore;
+        }
+
+        //Source : http://www.levibotelho.com/development/c-remove-diacritics-accents-from-a-string/
+        public static string RemoveDiacritics(string _text)
+        {
+            if (string.IsNullOrWhiteSpace(_text))
+                return _text;
+
+            _text = _text.Normalize(NormalizationForm.FormD);
+            var chars = _text.Where(_c => CharUnicodeInfo.GetUnicodeCategory(_c) != UnicodeCategory.NonSpacingMark).ToArray();
+            return new string(chars).Normalize(NormalizationForm.FormC);
         }
     }
 }

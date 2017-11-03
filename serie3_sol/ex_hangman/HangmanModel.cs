@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using hangman_lib;
@@ -75,9 +76,10 @@ namespace ex_hangman
 
         public void AddNewWord(string _word)
         {
-            if (!IsFileCreate())
+            if (hangman == null)
             {
                 hangman = new Hangman();
+                PathFile = $@"{Directory.GetCurrentDirectory()}\word.ser";
             }
             hangman.AddNewWord(_word);
         }

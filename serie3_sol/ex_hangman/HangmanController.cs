@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using hangman_lib;
 
 namespace ex_hangman
 {
@@ -19,7 +20,7 @@ namespace ex_hangman
 
         public bool AddNewWord()
         {
-            hangmanView.PrintMessage("Entrer votre nouveau mot (ne pas mettre d'accent) : ", false);
+            hangmanView.PrintMessage("Entrer votre nouveau mot (accent pas pris en compte) : ", false);
             string newWord = Console.ReadLine();
             bool success = IsAWord(newWord);
             hangmanView.PrintMessage(success
@@ -62,9 +63,9 @@ namespace ex_hangman
         {
             hangmanView.PrintHangman(hangmanModel.CurrentPlayWord.Item2.ToString());
             string str = Console.ReadLine();
-            if (str != null && str.Length == 1)
+            if (str != null && str.Length == 1 && IsAWord(str))
             {
-                hangmanModel.InputLetter(str[0]);
+                hangmanModel.InputLetter(Hangman.RemoveDiacritics(str.ToLower())[0]);
             }
             return hangmanModel.WordFind;
         }
@@ -109,12 +110,30 @@ namespace ex_hangman
             return CheckFile(path) ? path : null;
         }
 
-        private static bool CheckFile(string _path)
+        private bool CheckFile(string _path)
         {
             if (!string.IsNullOrEmpty(_path))
             {
-                FileInfo file = new FileInfo(_path);
-                return file.Exists && file.Extension.ToLower() == ".ser";
+                try
+                {
+                    var file = new FileInfo(_path);
+                    return file.Exists && file.Extension.ToLower() == ".ser";
+                }
+                catch (ArgumentException e)
+                {
+                    hangmanView.PrintMessage(e.Message);
+                    return false;
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    hangmanView.PrintMessage(e.Message);
+                    return false;
+                }
+                catch (PathTooLongException e)
+                {
+                    hangmanView.PrintMessage(e.Message);
+                    return false;
+                }
             }
             return false;
         }

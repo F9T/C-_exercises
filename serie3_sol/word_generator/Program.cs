@@ -10,7 +10,7 @@ namespace word_generator
             var hangman = new Hangman();
             hangman.AddNewWord("patate");
             hangman.AddNewWord("casserole");
-            hangman.AddNewWord("canape");
+            hangman.AddNewWord("canapé");
             hangman.AddNewWord("pomme");
             hangman.AddNewWord("champs");
             hangman.AddNewWord("Chariot");
