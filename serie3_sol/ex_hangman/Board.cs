@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Mime;
 
 namespace ex_hangman
 {
@@ -30,20 +31,20 @@ namespace ex_hangman
             {
                 choice = EnumChoice.None;
                 PrintOptions();
-                if (Int32.TryParse(Console.ReadLine(), out int number))
+                if (int.TryParse(Console.ReadLine(), out int number))
                 {
-                    Console.WriteLine();
+                    Console.Clear();
                     if (Enum.IsDefined(typeof(EnumChoice), number))
                     {
                         choice = (EnumChoice) number;
                         switch (choice)
                         {
                             case EnumChoice.ChooseFile:
-                                string pathFile = ChoosePathFile();
-                                if (pathFile != null)
+                                string pathLoadFile = ChoosePathFile();
+                                if (pathLoadFile != null)
                                 {
-                                    int numberWords = hangmanController.Deserialize(pathFile);
-                                    Console.WriteLine($"{numberWords} chargés avec succès");
+                                    int numberWords = hangmanController.Deserialize(pathLoadFile);
+                                    Console.WriteLine($"{numberWords} mots chargés avec succès.");
                                 }
                                 else
                                 {
@@ -51,26 +52,47 @@ namespace ex_hangman
                                 }
                                 break;
                             case EnumChoice.Play:
-                                if (hangmanController.LetsPlay())
+                                if (hangmanController.IsFileOpen())
                                 {
-                                    hangmanController.Play();
+                                    hangmanController.RandomWord();
+                                    while (!hangmanController.Play()) {}
+                                    hangmanController.End();
                                 }
                                 else
                                 {
-                                    goto case EnumChoice.ChooseFile;
+                                    Console.Write("Aucun fichier de mots n'est ouvert!");
                                 }
                                 break;
                             case EnumChoice.DisplayScores:
-
+                                if (hangmanController.IsFileOpen())
+                                {
+                                    hangmanController.DisplayScores();
+                                }
+                                else
+                                {
+                                    Console.Write("Aucun fichier de mots n'est ouvert!");
+                                }
                                 break;
                             case EnumChoice.AddNewWord:
-
+                                Console.Write("Entrer votre nouveau mot (ne pas mettre d'accent) : ");
+                                string newWord = Console.ReadLine();
+                                Console.WriteLine(hangmanController.AddNewWord(newWord)
+                                    ? $"Le mot {newWord} a été ajouté."
+                                    : $"Le mot {newWord} contient une erreur!");
                                 break;
                             case EnumChoice.SaveFile:
-
+                                string pathSaveFile = ChoosePathFile();
+                                if (pathSaveFile != null)
+                                {
+                                    hangmanController.Serialize(pathSaveFile);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Le chemin spécifié contient une erreur!");
+                                }
                                 break;
                             case EnumChoice.Exit:
-
+                                Environment.Exit(0);
                                 break;
                         }
                         Console.WriteLine();
@@ -86,13 +108,15 @@ namespace ex_hangman
             Console.WriteLine("1) Choisir un fichier de mots");
             Console.WriteLine("2) Jouer (trouver un mot)");
             Console.WriteLine("3) Afficher les scores");
-            Console.WriteLine("4) Terminer");
+            Console.WriteLine("4) Ajouter un nouveau mot");
+            Console.WriteLine("5) Sauvegarder le fichier de mots");
+            Console.WriteLine("6) Terminer");
             Console.Write("Choix : ");
         }
 
         private string ChoosePathFile()
         {
-            Console.Write("Donner le nom d'un fichier (.ser) : ");
+            Console.Write("Donner le chemin du fichier (.ser) : ");
             string path = Console.ReadLine();
             return CheckFile(path) ? path : null;
         }

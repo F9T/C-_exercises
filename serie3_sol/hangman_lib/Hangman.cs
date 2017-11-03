@@ -9,19 +9,11 @@ namespace hangman_lib
     public class Hangman
     {
         private Dictionary<StringBuilder, int> dictWordScore;
-        private Tuple<StringBuilder, StringBuilder> currentPlayWord;
-
-        public Hangman()
-        {
-        }
 
         public int CountWords()
         {
-            if (dictWordScore != null)
-            {
-                return dictWordScore.Count;
-            }
-            return 0;
+            //null-coalescing epxression with ?
+            return dictWordScore?.Count ?? 0;
         }
 
         public void AddNewWord(string _word)
@@ -38,18 +30,42 @@ namespace hangman_lib
             dictWordScore.Add(_word, -1);
         }
 
-        public void ChoiceRandomWord()
+        public void UpdateWordScore(StringBuilder _word, int _score)
         {
-            const int min = 0;
-            int max = dictWordScore.Count;
-            int random = new Random().Next(min, max);
-            var wordToFind = new StringBuilder(dictWordScore.Keys.ToArray()[random].ToString());
-            var hideWord = new StringBuilder(wordToFind.Capacity);
-            for (var i = 0; i < hideWord.Capacity; i++)
+            dictWordScore.TryGetValue(_word, out int score);
+            if (IsNewRecord(_word, _score))
+            {
+                dictWordScore[_word] = _score;
+            }
+        }
+
+        public bool IsNewRecord(StringBuilder _word, int _score)
+        {
+            dictWordScore.TryGetValue(_word, out int score);
+            return score == -1 || _score < score;
+        }
+
+        public Tuple<StringBuilder, StringBuilder> ChoiceRandomWord()
+        {
+            int random = new Random().Next(0, dictWordScore.Count);
+            var wordToFind = dictWordScore.Keys.ToArray()[random];
+            var hideWord = GetHideString(wordToFind.Length);
+            return new Tuple<StringBuilder, StringBuilder>(wordToFind, hideWord);
+        }
+
+        public StringBuilder GetHideString(int _length)
+        {
+            var hideWord = new StringBuilder();
+            for (var i = 0; i < _length; i++)
             {
                 hideWord.Append("_");
             }
-            this.currentPlayWord = new Tuple<StringBuilder, StringBuilder>(wordToFind, hideWord);
+            return hideWord;
+        }
+
+        public Dictionary<StringBuilder, int> GetWordScore()
+        {
+            return dictWordScore;
         }
     }
 }

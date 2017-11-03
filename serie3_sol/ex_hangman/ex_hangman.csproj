@@ -59,6 +59,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>copy "$(ProjectDir)files\*.ser" "$(SolutionDir)files\"</PreBuildEvent>
+    <PreBuildEvent>del "$(TargetDir)files\*.ser"
+xcopy "$(ProjectDir)files\*.ser" "$(TargetDir)files\"</PreBuildEvent>
   </PropertyGroup>
 </Project>
