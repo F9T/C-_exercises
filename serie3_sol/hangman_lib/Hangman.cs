@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace hangman_lib
 {
@@ -16,9 +15,18 @@ namespace hangman_lib
         {
         }
 
+        public int CountWords()
+        {
+            if (dictWordScore != null)
+            {
+                return dictWordScore.Count;
+            }
+            return 0;
+        }
+
         public void AddNewWord(string _word)
         {
-            this.AddNewWord(new StringBuilder(_word));
+            this.AddNewWord(new StringBuilder(_word.ToLower()));
         }
 
         private void AddNewWord(StringBuilder _word)
