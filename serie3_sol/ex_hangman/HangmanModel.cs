@@ -9,6 +9,9 @@ namespace ex_hangman
     public class HangmanModel
     {
         private Hangman hangman;
+        private bool isSaved;
+
+        public string PathFile { get; set; }
         
         public Tuple<StringBuilder, StringBuilder> CurrentPlayWord { get; set; }
 
@@ -18,6 +21,7 @@ namespace ex_hangman
         public HangmanModel()
         {
             this.CurrentCount = 0;
+            this.isSaved = true;
         }
 
         public void GetRandomWord()
@@ -34,6 +38,7 @@ namespace ex_hangman
         public void UpdateHangmanScore()
         {
             hangman.UpdateWordScore(CurrentPlayWord.Item1, CurrentCount);
+            isSaved = false;
         }
 
         public List<Tuple<StringBuilder, StringBuilder, int>> GetWordScore()
@@ -77,6 +82,7 @@ namespace ex_hangman
                 hangman = new Hangman();
             }
             hangman.AddNewWord(_word);
+            isSaved = false;
         }
 
         public bool FileCreate()
@@ -89,15 +95,32 @@ namespace ex_hangman
             return FileCreate() && hangman.CountWords() > 0;
         }
 
+        public bool IsSaved()
+        {
+            return isSaved && PathFile != null;
+        }
+
         public int Deserialize(string _path)
         {
             hangman = HangmanSerializer.Deserialize(_path);
-            return FileCreate() ? hangman.CountWords() : 0;
+            if (FileCreate())
+            {
+                PathFile = _path;
+                isSaved = true;
+                return hangman.CountWords();
+            }
+            return 0;
         }
 
         public bool Serialize(string _path)
         {
-            return HangmanSerializer.Serialize(_path, hangman);
+            if (HangmanSerializer.Serialize(_path, hangman))
+            {
+                PathFile = _path;
+                isSaved = true;
+                return true;
+            }
+            return false;
         }
     }
 }

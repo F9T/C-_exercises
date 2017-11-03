@@ -114,9 +114,9 @@ namespace ex_hangman
             Console.Write("Choix : ");
         }
 
-        private string ChoosePathFile()
+        private string ChoosePathFile(string _path="")
         {
-            Console.Write("Donner le chemin du fichier (.ser) : ");
+            Console.Write($"Donner le chemin du fichier (.ser) : {_path}");
             string path = Console.ReadLine();
             return CheckFile(path) ? path : null;
         }
