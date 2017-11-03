@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ex_hangman
+namespace hangman_lib
 {
     [Serializable]
     public class Hangman
@@ -14,7 +14,20 @@ namespace ex_hangman
 
         public Hangman()
         {
+        }
 
+        public void AddNewWord(string _word)
+        {
+            this.AddNewWord(new StringBuilder(_word));
+        }
+
+        private void AddNewWord(StringBuilder _word)
+        {
+            if (dictWordScore == null)
+            {
+                dictWordScore = new Dictionary<StringBuilder, int>();
+            }
+            dictWordScore.Add(_word, -1);
         }
 
         public void ChoiceRandomWord()

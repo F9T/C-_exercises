@@ -58,7 +58,7 @@ namespace ex_hangman
                                 }
                                 else
                                 {
-                                    goto 1;
+                                    goto case EnumChoice.ChooseFile;
                                 }
                                 break;
                             case EnumChoice.DisplayScores:

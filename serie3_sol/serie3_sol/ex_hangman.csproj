@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B3603B2F-DAB5-4F75-9CB0-9B0F6A7BF9B8}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>serie3_sol</RootNamespace>
-    <AssemblyName>serie3_sol</AssemblyName>
+    <RootNamespace>ex_hangman</RootNamespace>
+    <AssemblyName>ex_hangman</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Hangman.cs" />
     <Compile Include="HangmanController.cs" />
     <Compile Include="HangmanModel.cs" />
     <Compile Include="Program.cs" />
@@ -51,6 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hangman_lib\hangman_lib.csproj">
+      <Project>{54ed7b17-be9e-4c27-beaf-c37268e8f065}</Project>
+      <Name>hangman_lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
