@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using hangman_lib;
 
 namespace word_generator
@@ -11,12 +7,17 @@ namespace word_generator
     {
         public static void Main(string[] _args)
         {
-            Hangman hangman = new Hangman();
+            var hangman = new Hangman();
             hangman.AddNewWord("patate");
             hangman.AddNewWord("casserole");
             hangman.AddNewWord("canape");
             hangman.AddNewWord("pomme");
+            hangman.AddNewWord("champs");
+            hangman.AddNewWord("Chariot");
+            hangman.AddNewWord("Ruisseau");
             HangmanSerializer.Serialize("word.ser", hangman);
+            Console.WriteLine("Word created");
+            Console.ReadLine();
         }
     }
 }
