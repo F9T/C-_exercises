@@ -25,10 +25,12 @@ namespace hangman_lib
                 catch (ArgumentNullException e)
                 {
                     Console.WriteLine(e.Message);
+                    return null;
                 }
                 catch (SerializationException e)
                 {
                     Console.WriteLine(e.Message);
+                    return null;
                 }
             }
             return hangman;
