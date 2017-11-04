@@ -2,8 +2,14 @@
 
 namespace ex_hangman
 {
+    /// <summary>
+    /// Cette classe s'occupe de lancer la boucle du jeu
+    /// </summary>
     public class Board
     {
+        /// <summary>
+        /// Enumeration des options possibles
+        /// </summary>
         private enum EnumChoice
         {
             ChooseFile = 1,
@@ -23,6 +29,9 @@ namespace ex_hangman
             hangmanController = new HangmanController();
         }
 
+        /// <summary>
+        /// Boucle du jeu.
+        /// </summary>
         public void LoopGame()
         {
             EnumChoice choice = EnumChoice.None;
@@ -69,6 +78,9 @@ namespace ex_hangman
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// Option de sauvegarde
+        /// </summary>
         private void SaveFile()
         {
             string pathSaveFile = hangmanController.ChoosePathFile(false);
@@ -82,6 +94,9 @@ namespace ex_hangman
             }
         }
 
+        /// <summary>
+        /// Option d'affichage des scores
+        /// </summary>
         private void DisplayScoresOption()
         {
             if (hangmanController.IsFileOpen())
@@ -94,6 +109,9 @@ namespace ex_hangman
             }
         }
 
+        /// <summary>
+        /// Option de chargement d'un fichier
+        /// </summary>
         private void ChooseFileOption()
         {
             string pathLoadFile = hangmanController.ChoosePathFile();
@@ -107,6 +125,9 @@ namespace ex_hangman
             }
         }
 
+        /// <summary>
+        /// Option pour jouer une partie
+        /// </summary>
         private void PlayOption()
         {
             if (hangmanController.IsFileOpen())
@@ -130,6 +151,10 @@ namespace ex_hangman
             }
         }
 
+        /// <summary>
+        /// Main
+        /// </summary>
+        /// <param name="_args">string[] : arguments command line</param>
         public static void Main(string[] _args)
         {
             var prog = new Board();
